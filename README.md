@@ -48,7 +48,15 @@ Use any of the following commands from the **project root directory** to start t
 
 : Runs the full PWA Studio developer experience, which include Venia hot-reloading and concurrent Buildpack/Peregrine rebuilds.
 
-### Storybook testing
+
+
+### Step 6. Linting and testing
+
+The Venia concept project also contains scripts for formatting (`yarn run prettier`), style analysis (`yarn run lint`), and running unit tests (`yarn test`).
+
+Use these scripts to keep your codebase well-formatted and test functionality.
+
+#### Storybook testing
 
 To run storybook use command: 
 
@@ -60,15 +68,10 @@ To run storybook use command:
 ![image](https://user-images.githubusercontent.com/41162650/93874277-cae0f800-fcdb-11ea-9c41-e6cbca2fc0a4.png)
 
 
-### Step 6. Linting and testing
 
-The Venia concept project also contains scripts for formatting (`yarn run prettier`), style analysis (`yarn run lint`), and running unit tests (`yarn test`).
+### 7.Work With GraphQl
 
-Use these scripts to keep your codebase well-formatted and test functionality.
-
-## 7.Work With GraphQl
-
-### Request country data
+#### Request country data
 
 Create a `country.gql.js` file under `src/components/Country` with the following content:
 
@@ -156,7 +159,7 @@ const Country = () => {
 export default Country;
 ```
 
-## 8. Associate components to routes
+### 8. Associate components to routes
 
 Use the steps in the [Add a static route][] tutorial to add the following entries to the Routes component:
 
