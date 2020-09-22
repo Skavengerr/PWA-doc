@@ -187,3 +187,20 @@ Use the steps in the [Add a static route][] tutorial to add the following entrie
 
 This update associates the Countries and Country components with specific routes.
 The pattern used for the country route lets the `useParams()` hook get the country ID from the URL.
+
+
+-----------------------------------------------------------------------------------------------------
+
+
+## Custom React hooks
+
+Many of the functions provided by Peregrine are [custom React hooks][].
+This lets them maintain an internal state without relying on an external library, such as Redux.
+
+Peregrine hooks are designed to be flexible, and non-opinionated about UI.
+They contain code for providing data or behavior logic and do not render content themselves.
+Rendering content is left up to UI components.
+
+Separating logic and presentation code gives developers more flexibility on how to use PWA Studio components with their own custom code.
+A developer may choose to use a Venia feature that uses certain Peregrine hooks with minor visual modifications, or
+they can use those same Peregrine hooks to develop their own feature with a different UI.
