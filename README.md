@@ -211,3 +211,39 @@ they can use those same Peregrine hooks to develop their own feature with a diff
 
 ![image](https://user-images.githubusercontent.com/41162650/93887678-ad1d8e00-fcef-11ea-838b-d2ad00a3b3b7.png)
 
+
+
+### Redux
+
+[Redux][] is a state management design pattern and library.
+It promotes the idea of a global object tree that contains the state of the whole application.
+This object is known as a [store][].
+
+The store is a read-only object, which can only be updated by dispatching a [reducer][] function.
+Reducer functions accept the current state and an [action][] object as parameters and returns the next state.
+
+Application components are able to [dispatch][] various actions to update the state.
+Components can also [subscribe][] to state changes to update their appearance or behavior.
+
+Early versions of PWA Studio used the Redux library directly as the primary mechanism for managing application state,
+and the Redux pattern can be seen in hooks such as [`useRestResponse()`][].
+
+Currently, PWA Studio abstracts away its Redux implementation details using Peregrine hooks and context providers.
+This opens up the possibility of the project replacing Redux in Peregrine with another state management library without breaking state dependent components, such as those in Venia.
+
+PWA Studio allows you to customize reducers and enhancers.
+The following example uses `combineReducers()` to combine the default Peregrine reducers with custom reducers specific to the project and uses the combined reducers when creating the Redux store.
+
+```jsx
+// Example src/store.js file
+
+import { combineReducers, createStore } from 'redux';
+import { enhancer, reducers } from '@magento/peregrine';
+
+import myReducers from './lib/reducers';
+
+// You can add your own reducers here and combine them with the Peregrine exports.
+const rootReducer = combineReducers({ ...reducers, ...myReducers });
+
+export default createStore(rootReducer, enhancer);
+```
