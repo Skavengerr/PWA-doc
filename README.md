@@ -1,15 +1,15 @@
 # PWA-doc
 The docs for pwa application with magento
 
-### Step 1. Clone the PWA Studio repository into your development environment.
+## Step 1. Clone the PWA Studio repository into your development environment.
 
 `git clone https://github.com/magento/pwa-studio.git`
 
-### Step 2. Install PWA Studio dependencies
+## Step 2. Install PWA Studio dependencies
 
 `yarn install`
 
-### Step 3. Generate SSL certificate
+## Step 3. Generate SSL certificate
 
 PWA features require an HTTPS secure domain.
 
@@ -17,7 +17,7 @@ PWA features require an HTTPS secure domain.
 yarn buildpack create-custom-origin packages/venia-concept
 `
 
-### Step 4. Create the `.env` file
+## Step 4. Create the `.env` file
 
 Use the `create-env-file` subcommand for the `buildpack` CLI tool to create a `.env` file for Venia.
 The subcommand generates a `packages/venia-concept/.env` file where you can set the value of `MAGENTO_BACKEND_URL` to the URL of a running Magento instance.
@@ -30,7 +30,7 @@ CHECKOUT_BRAINTREE_TOKEN="sandbox_8yrzsvtm_s2bg8fs563crhqzk" \
 yarn buildpack create-env-file packages/venia-concept
 `
 
-### Step 5. Start the server
+## Step 5. Start the server
 
 Before you run the server, generate build artifacts for Venia using the following command in the **project root directory**:
 
@@ -50,7 +50,7 @@ Use any of the following commands from the **project root directory** to start t
 
 
 
-### Step 6. Linting and testing
+## Step 6. Linting and testing
 
 The Venia concept project also contains scripts for formatting (`yarn run prettier`), style analysis (`yarn run lint`), and running unit tests (`yarn test`).
 
@@ -69,7 +69,7 @@ To run storybook use command:
 
 
 
-### 7.Work With GraphQl
+## Step 7.Work With GraphQl
 
 #### Request country data
 
@@ -159,7 +159,7 @@ const Country = () => {
 export default Country;
 ```
 
-### 8. Associate components to routes
+## Step 8. Associate components to routes
 
 Use the steps in the [Add a static route][] tutorial to add the following entries to the Routes component:
 
