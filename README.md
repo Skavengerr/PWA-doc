@@ -163,6 +163,7 @@ export default Country;
 
 Use the steps in the [Add a static route][] tutorial to add the following entries to the Routes component:
 
+/packages/venia-ui/lib/components/Routes
 ```diff
  <Suspense fallback={fullPageLoadingIndicator}>
      <Switch>
@@ -204,3 +205,7 @@ Rendering content is left up to UI components.
 Separating logic and presentation code gives developers more flexibility on how to use PWA Studio components with their own custom code.
 A developer may choose to use a Venia feature that uses certain Peregrine hooks with minor visual modifications, or
 they can use those same Peregrine hooks to develop their own feature with a different UI.
+
+/packages/peregine/lib/hooks
+![image](https://user-images.githubusercontent.com/41162650/93887678-ad1d8e00-fcef-11ea-838b-d2ad00a3b3b7.png)
+
