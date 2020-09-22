@@ -48,7 +48,13 @@ Use any of the following commands from the **project root directory** to start t
 
 : Runs the full PWA Studio developer experience, which include Venia hot-reloading and concurrent Buildpack/Peregrine rebuilds.
 
-##  yarn storybook:venia - see storybook of project
+### Storybook testing
+
+To run storybook use command: 
+
+`yarn storybook:venia`
+
+#### storybook structure
 
 ![image](https://user-images.githubusercontent.com/41162650/93874211-b4d33780-fcdb-11ea-8506-cb8860b808e8.png)
 ![image](https://user-images.githubusercontent.com/41162650/93874277-cae0f800-fcdb-11ea-9c41-e6cbca2fc0a4.png)
