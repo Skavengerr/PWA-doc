@@ -164,6 +164,7 @@ export default Country;
 Use the steps in the [Add a static route][] tutorial to add the following entries to the Routes component:
 
 /packages/venia-ui/lib/components/Routes
+
 ```diff
  <Suspense fallback={fullPageLoadingIndicator}>
      <Switch>
@@ -207,5 +208,6 @@ A developer may choose to use a Venia feature that uses certain Peregrine hooks 
 they can use those same Peregrine hooks to develop their own feature with a different UI.
 
 /packages/peregine/lib/hooks
+
 ![image](https://user-images.githubusercontent.com/41162650/93887678-ad1d8e00-fcef-11ea-838b-d2ad00a3b3b7.png)
 
