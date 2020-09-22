@@ -17,7 +17,7 @@ PWA features require an HTTPS secure domain.
 yarn buildpack create-custom-origin packages/venia-concept
 `
 
-## Step 4. Create the `.env` file
+### Step 4. Create the `.env` file
 
 Use the `create-env-file` subcommand for the `buildpack` CLI tool to create a `.env` file for Venia.
 The subcommand generates a `packages/venia-concept/.env` file where you can set the value of `MAGENTO_BACKEND_URL` to the URL of a running Magento instance.
