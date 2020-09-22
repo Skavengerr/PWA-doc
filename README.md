@@ -60,4 +60,127 @@ To run storybook use command:
 ![image](https://user-images.githubusercontent.com/41162650/93874277-cae0f800-fcdb-11ea-9c41-e6cbca2fc0a4.png)
 
 
-## 5.Routing
+### Step 6. Linting and testing
+
+The Venia concept project also contains scripts for formatting (`yarn run prettier`), style analysis (`yarn run lint`), and running unit tests (`yarn test`).
+
+Use these scripts to keep your codebase well-formatted and test functionality.
+
+## 7.Work With GraphQl
+
+### Request country data
+
+Create a `country.gql.js` file under `src/components/Country` with the following content:
+
+```js
+import { gql } from '@apollo/client';
+
+const GET_COUNTRY_QUERY = gql`
+    query GetCountry($id: String) {
+        country(id: $id) {
+            id
+            full_name_english
+            available_regions {
+                id
+                name
+            }
+        }
+    }
+`;
+
+export default {
+    queries: {
+        getCountryQuery: GET_COUNTRY_QUERY
+    },
+    mutations: {}
+};
+```
+
+This file defines a component that creates a list of countries where the backend Magento store does business.
+Each country listed is a link that points to a page for that country.
+
+In the code, the component imports and destructures the GraphQL query from the `countries.gql.js` file and makes a request using `useQuery()` from the `@apollo/client` library.
+
+Next, create an `index.js` file under `src/components/Countries`.
+Add the following content to export the Countries component from the directory.
+
+Under `src/components/Country`, create a `country.js` file with the following content:
+
+```jsx
+import React, { useEffect } from 'react';
+import { useQuery } from '@apollo/client';
+import { useParams } from '@magento/venia-ui/lib/drivers';
+
+import countryOperations from './country.gql';
+
+import Regions from './regions';
+
+const Country = () => {
+    // Scroll to the top on page load
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
+    const { id } = useParams();
+
+    const { queries } = countryOperations;
+    const { getCountryQuery } = queries;
+
+    // Fetch the data using apollo react hooks
+    const { data, error, loading } = useQuery(getCountryQuery, {
+        variables: { id: id }
+    });
+
+    if (loading) {
+        return <span>Loading...</span>;
+    }
+
+    if (error) {
+        // NOTE: This is only meant to show WHERE you can handle
+        // GraphQL errors. Not HOW you should handle it.
+        return <span>Error!</span>;
+    }
+
+    const { country } = data;
+
+    const { full_name_english: name, available_regions: regions } = country;
+
+    return (
+        <div>
+            <h2>{name}</h2>
+            <Regions regions={regions} />
+        </div>
+    );
+};
+
+export default Country;
+```
+
+## 8. Associate components to routes
+
+Use the steps in the [Add a static route][] tutorial to add the following entries to the Routes component:
+
+```diff
+ <Suspense fallback={fullPageLoadingIndicator}>
+     <Switch>
++        <Route exact path="/countries">
++            <Countries />
++        </Route>
++        <Route path="/country/:id?">
++            <Country />
++        </Route>
+         <Route exact path="/search.html">
+             <Search />
+         </Route>
+         <Route exact path="/create-account">
+             <CreateAccountPage />
+         </Route>
+         <Route>
+             <MagentoRoute />
+         </Route>
+     </Switch>
+ </Suspense>
+```
+
+This update associates the Countries and Country components with specific routes.
+The pattern used for the country route lets the `useParams()` hook get the country ID from the URL.
