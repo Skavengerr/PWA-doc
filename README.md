@@ -1,6 +1,9 @@
 # PWA-doc
 The docs for pwa application with magento
 
+tutorial:
+https://monosnap.com/file/kzYBm8mpmqNg2Ucgcwjb9DXRfWyClF
+
 ## Step 1. Clone the PWA Studio repository into your development environment.
 
 `git clone https://github.com/magento/pwa-studio.git`
