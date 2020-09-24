@@ -5,6 +5,8 @@ The docs for pwa application with magento
 
 `git clone https://github.com/magento/pwa-studio.git`
 
+OR `git clone https://{name of your bitbucket}@bitbucket.org/qlicksdev/magento-studio.git
+
 ## Step 2. Install dependencies
 
 `yarn install`
