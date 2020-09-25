@@ -25,7 +25,7 @@ Open a new tab with a link that shows you in the console
 
 ### Step 5. Linting and testing
 
-The Venia concept project also contains scripts for formatting (`yarn run prettier`), style analysis (`yarn run lint`), and running unit tests (`yarn test`).
+This project also contains scripts for formatting (`yarn run prettier`), style analysis (`yarn run lint`), and running unit tests (`yarn test`).
 
 Use these scripts to keep your codebase well-formatted and test functionality.
 
