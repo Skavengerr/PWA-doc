@@ -1,254 +1,121 @@
-# PWA-doc
-The docs for pwa application with magento
+Documentation for Magento PWA Studio packages is located at [https://pwastudio.io](https://pwastudio.io).
 
-tutorial:
-https://monosnap.com/file/kzYBm8mpmqNg2Ucgcwjb9DXRfWyClF
 
-## Step 1. Clone the PWA Studio repository into your development environment.
+## Step 1. Create magento PWA app
 
-`git clone https://github.com/magento/pwa-studio.git`
+MacOs / Linux setup `yarn create @magento/pwa` and create the application according to the installation steps
 
-OR `git clone https://{name of your bitbucket}@bitbucket.org/qlicksdev/magento-studio.git
+Windows setup `git clone https://{your bitbucketname}@bitbucket.org/qlicksdev/magento-studio.git`
 
-## Step 2. Install dependencies
+## Step 2. Install Dependencies
 
 `yarn install`
 
-## Step 3. Generate SSL certificate
+## Step 3. Use the create-custom-origin sub-command from the buildpack CLI to create a custom hostname and SSL cert:
 
-PWA features require an HTTPS secure domain.
+`yarn buildpack create-custom-origin ./`
 
-`
-yarn buildpack create-custom-origin packages/venia-concept
-`
+## Step 4. Start the server
 
-## Step 4. Create the `.env` file
+`yarn run watch`
 
-Use the `create-env-file` subcommand for the `buildpack` CLI tool to create a `.env` file for Venia.
-The subcommand generates a `packages/venia-concept/.env` file where you can set the value of `MAGENTO_BACKEND_URL` to the URL of a running Magento instance.
+Open a new tab with a link that shows you in the console
 
-You can create the `.env` file and set the `MAGENTO_BACKEND_URL` value at the same time using a command similar to the following:
+![image](https://user-images.githubusercontent.com/41162650/94237057-edab2080-ff16-11ea-9c3b-21c25314d06a.png)
 
-`
-MAGENTO_BACKEND_URL="https://master-7rqtwti-mfwmkrjfqvbjk.us-4.magentosite.cloud/" \
-CHECKOUT_BRAINTREE_TOKEN="sandbox_8yrzsvtm_s2bg8fs563crhqzk" \
-yarn buildpack create-env-file packages/venia-concept
-`
-
-## Step 5. Start the server
-
-Before you run the server, generate build artifacts for Venia using the following command in the **project root directory**:
-
-`yarn run build`
-
-#### Run the server
-
-Use any of the following commands from the **project root directory** to start the server:
-
-`yarn run watch:venia`
-
-: Starts the Venia storefront development environment.
-
-`yarn run watch:all`
-
-: Runs the full PWA Studio developer experience, which include Venia hot-reloading and concurrent Buildpack/Peregrine rebuilds.
-
-
-
-## Step 6. Linting and testing
+### Step 5. Linting and testing
 
 The Venia concept project also contains scripts for formatting (`yarn run prettier`), style analysis (`yarn run lint`), and running unit tests (`yarn test`).
 
 Use these scripts to keep your codebase well-formatted and test functionality.
 
-#### Storybook testing
+## Step 6. Storybook testing
 
-To run storybook use command: 
+To run storybook use command:
 
-`yarn storybook:venia`
+`yarn storybook`
 
-#### storybook structure
+### storybook structure
 
 ![image](https://user-images.githubusercontent.com/41162650/93874211-b4d33780-fcdb-11ea-8506-cb8860b808e8.png)
 ![image](https://user-images.githubusercontent.com/41162650/93874277-cae0f800-fcdb-11ea-9c41-e6cbca2fc0a4.png)
 
-
+To run lint
 
 ## Step 7. Work With GraphQl
 
 #### Request country data
 
-Create a `country.gql.js` file under `src/components/Country` with the following content:
-
-```js
-import { gql } from '@apollo/client';
-
-const GET_COUNTRY_QUERY = gql`
-    query GetCountry($id: String) {
-        country(id: $id) {
-            id
-            full_name_english
-            available_regions {
-                id
-                name
-            }
-        }
-    }
-`;
-
-export default {
-    queries: {
-        getCountryQuery: GET_COUNTRY_QUERY
-    },
-    mutations: {}
-};
-```
-
-This file defines a component that creates a list of countries where the backend Magento store does business.
-Each country listed is a link that points to a page for that country.
-
 In the code, the component imports and destructures the GraphQL query from the `countries.gql.js` file and makes a request using `useQuery()` from the `@apollo/client` library.
 
-Next, create an `index.js` file under `src/components/Countries`.
-Add the following content to export the Countries component from the directory.
-
-Under `src/components/Country`, create a `country.js` file with the following content:
-
 ```jsx
-import React, { useEffect } from 'react';
-import { useQuery } from '@apollo/client';
-import { useParams } from '@magento/venia-ui/lib/drivers';
+import React from 'react';
+import {gql} from '@apollo/client' // used for sending graphql requests
+import { useQuery } from '@apollo/client'; // used for parsing response from backEnd
 
-import countryOperations from './country.gql';
+const GET_COUNTRIES_QUERY = gql`
+	query getAllCountries {
+		countries {
+			available_regions {
+				code
+				id
+				name
+			}
+			id
+		}
+	}
+`
 
-import Regions from './regions';
-
-const Country = () => {
-    // Scroll to the top on page load
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, []);
-
-    const { id } = useParams();
-
-    const { queries } = countryOperations;
-    const { getCountryQuery } = queries;
+const Countries = () => {
+    const { queries } = GET_COUNTRIES_QUERY;
+    const { getCountriesQuery } = queries;
 
     // Fetch the data using apollo react hooks
-    const { data, error, loading } = useQuery(getCountryQuery, {
-        variables: { id: id }
-    });
+    const { data, error, loading } = useQuery(getCountriesQuery);
 
+    // Loading and error states can detected using values returned from
+    // the useQuery hook
     if (loading) {
         return <span>Loading...</span>;
     }
 
     if (error) {
-        // NOTE: This is only meant to show WHERE you can handle
-        // GraphQL errors. Not HOW you should handle it.
+        // This is only meant to show WHERE you can handleGraphQL errors
         return <span>Error!</span>;
     }
 
-    const { country } = data;
+    const { countries } = data;
 
-    const { full_name_english: name, available_regions: regions } = country;
-
-    return (
-        <div>
-            <h2>{name}</h2>
-            <Regions regions={regions} />
-        </div>
-    );
+return (
+        <ul>
+            {countries.map(country => {
+                <li key={country.id}>
+                    {country.name}
+                </li>
+            })}
+        </ul>
+    )
 };
 
-export default Country;
+export default Countries;
 ```
 
 ## Step 8. Associate components to routes
 
 Use the steps in the [Add a static route][] tutorial to add the following entries to the Routes component:
 
-`/packages/venia-ui/lib/components/Routes`
+`./local-intercept.js`
 
-```diff
- <Suspense fallback={fullPageLoadingIndicator}>
-     <Switch>
-+        <Route exact path="/countries">
-+            <Countries />
-+        </Route>
-+        <Route path="/country/:id?">
-+            <Country />
-+        </Route>
-         <Route exact path="/search.html">
-             <Search />
-         </Route>
-         <Route exact path="/create-account">
-             <CreateAccountPage />
-         </Route>
-         <Route>
-             <MagentoRoute />
-         </Route>
-     </Switch>
- </Suspense>
+```js
+module.exports = targets => {
+  targets.of("@magento/venia-ui").routes.tap(routes => {
+    routes.push({
+      name: "MyGreetingRoute", // name of component
+      pattern: "/greeting", // url for this components
+      path: require.resolve("../components/GreetingPage/greetingPage.js") // path to component
+    });
+    return routes;
+  });
+};
 ```
 
-This update associates the Countries and Country components with specific routes.
-The pattern used for the country route lets the `useParams()` hook get the country ID from the URL.
-
-
------------------------------------------------------------------------------------------------------
-
-
-## Custom React hooks
-
-Many of the functions provided by Peregrine are [custom React hooks][].
-This lets them maintain an internal state without relying on an external library, such as Redux.
-
-Peregrine hooks are designed to be flexible, and non-opinionated about UI.
-They contain code for providing data or behavior logic and do not render content themselves.
-Rendering content is left up to UI components.
-
-Separating logic and presentation code gives developers more flexibility on how to use PWA Studio components with their own custom code.
-A developer may choose to use a Venia feature that uses certain Peregrine hooks with minor visual modifications, or
-they can use those same Peregrine hooks to develop their own feature with a different UI.
-
-`/packages/peregine/lib/hooks`
-
-![image](https://user-images.githubusercontent.com/41162650/93887678-ad1d8e00-fcef-11ea-838b-d2ad00a3b3b7.png)
-
-
-
-### Redux
-
-[Redux][] is a state management design pattern and library.
-It promotes the idea of a global object tree that contains the state of the whole application.
-This object is known as a [store][].
-
-The store is a read-only object, which can only be updated by dispatching a [reducer][] function.
-Reducer functions accept the current state and an [action][] object as parameters and returns the next state.
-
-Application components are able to [dispatch][] various actions to update the state.
-Components can also [subscribe][] to state changes to update their appearance or behavior.
-
-Early versions of PWA Studio used the Redux library directly as the primary mechanism for managing application state,
-and the Redux pattern can be seen in hooks such as [`useRestResponse()`][].
-
-Currently, PWA Studio abstracts away its Redux implementation details using Peregrine hooks and context providers.
-This opens up the possibility of the project replacing Redux in Peregrine with another state management library without breaking state dependent components, such as those in Venia.
-
-PWA Studio allows you to customize reducers and enhancers.
-The following example uses `combineReducers()` to combine the default Peregrine reducers with custom reducers specific to the project and uses the combined reducers when creating the Redux store.
-
-```jsx
-// Example src/store.js file
-
-import { combineReducers, createStore } from 'redux';
-import { enhancer, reducers } from '@magento/peregrine';
-
-import myReducers from './lib/reducers';
-
-// You can add your own reducers here and combine them with the Peregrine exports.
-const rootReducer = combineReducers({ ...reducers, ...myReducers });
-
-export default createStore(rootReducer, enhancer);
-```
