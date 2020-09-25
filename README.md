@@ -40,7 +40,6 @@ To run storybook use command:
 ![image](https://user-images.githubusercontent.com/41162650/93874211-b4d33780-fcdb-11ea-8506-cb8860b808e8.png)
 ![image](https://user-images.githubusercontent.com/41162650/93874277-cae0f800-fcdb-11ea-9c41-e6cbca2fc0a4.png)
 
-To run lint
 
 ## Step 7. Work With GraphQl
 
