@@ -2,7 +2,7 @@ Documentation for Magento PWA Studio packages is located at [https://pwastudio.i
 
 # MacOs / Linux setup
 
-## Step 1. Create magento PWA app
+## Step 1. Clone project into your system
 
 `git clone https://{your bitbucketname}@bitbucket.org/qlicksdev/magento-studio.git`
 
@@ -25,13 +25,13 @@ Open a new tab with a link that shows you in the console
 
 # Windows setup
 
-## Step 1. Install Ubuntu
+## Step 1. Install Ubuntu and Create symbolic links
 
 Install VirtualBox and Ubuntu, create shared folders.
 
-Creating symbolic links within folders shared with the windows host system `VBoxManage.exe setextradata VM_NAME VBoxInternal2/SharedFoldersEnableSymlinksCreate/SHARED_NAME 1`
+Create symbolic links within folders shared with the windows host system `VBoxManage.exe setextradata VM_NAME VBoxInternal2/SharedFoldersEnableSymlinksCreate/SHARED_NAME 1`
 
-`Open Local Security Policy, Navigate to: Local Policies -> User Rights Assignment, Open "Create Symbolic Links", Add your username (or a group you are assigned to), Restart PC`
+Open Local Security Policy, Navigate to: Local Policies -> User Rights Assignment, Open "Create Symbolic Links", Add your username (or a group you are assigned to), Restart PC
 
 ## Step 2. Install Dependencies
 
@@ -108,7 +108,7 @@ Add the path to your intercept file in the pwa-studio.targets.intercept section 
   },
 ```
 
-## Replace venia files
+## Add your components
 
 At "main" component you can add your components
 
