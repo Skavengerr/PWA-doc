@@ -1,11 +1,10 @@
 Documentation for Magento PWA Studio packages is located at [https://pwastudio.io](https://pwastudio.io).
 
+# MacOs / Linux setup
 
 ## Step 1. Create magento PWA app
 
-MacOs / Linux setup `yarn create @magento/pwa` and create the application according to the installation steps
-
-Windows setup `git clone https://{your bitbucketname}@bitbucket.org/qlicksdev/magento-studio.git`
+`git clone https://{your bitbucketname}@bitbucket.org/qlicksdev/magento-studio.git`
 
 ## Step 2. Install Dependencies
 
@@ -13,7 +12,8 @@ Windows setup `git clone https://{your bitbucketname}@bitbucket.org/qlicksdev/ma
 
 ## Step 3. Use the create-custom-origin sub-command from the buildpack CLI to create a custom hostname and SSL cert:
 
-`yarn buildpack create-custom-origin ./`
+-   copy `.env.example` to `.env` and change `MAGENTO_BACKEND_URL` if needed
+-   `yarn buildpack create-custom-origin ./`
 
 ## Step 4. Start the server
 
@@ -23,13 +23,51 @@ Open a new tab with a link that shows you in the console
 
 ![image](https://user-images.githubusercontent.com/41162650/94237057-edab2080-ff16-11ea-9c3b-21c25314d06a.png)
 
-### Step 5. Linting and testing
+# Windows setup
+
+## Step 1. Install Ubuntu
+
+Install VirtualBox and Ubuntu, create shared folders.
+
+Creating symbolic links within folders shared with the windows host system `VBoxManage.exe setextradata VM_NAME VBoxInternal2/SharedFoldersEnableSymlinksCreate/SHARED_NAME 1`
+
+`Open Local Security Policy, Navigate to: Local Policies -> User Rights Assignment, Open "Create Symbolic Links", Add your username (or a group you are assigned to), Restart PC`
+
+## Step 2. Install Dependencies
+
+Install Nodejs and yarnpkg to your Ubuntu machine:
+
+`sudo apt install nodejs`
+
+`sudo apt-get install yarnpkg`
+
+Clone magento-pwa-studio in your shared folder
+
+`git clone https://{your bitbucket name}@bitbucket.org/qlicksdev/magento-studio.git`
+
+Go into folder with your magento-pwa application `cd magento-studio`
+
+Install Dependencies `yarnpkg install`
+
+## Step 3. Env
+
+-   copy `.env.example` to `.env` and change `MAGENTO_BACKEND_URL` if needed
+
+## Step 4. Start the server
+
+`yarnpkg watch`
+
+Open a new tab with a link that shows you in the console
+
+![image](https://user-images.githubusercontent.com/41162650/94237057-edab2080-ff16-11ea-9c3b-21c25314d06a.png)
+
+## Linting and testing
 
 This project also contains scripts for formatting (`yarn run prettier`), style analysis (`yarn run lint`), and running unit tests (`yarn test`).
 
 Use these scripts to keep your codebase well-formatted and test functionality.
 
-## Step 6. Storybook testing
+## Storybook testing
 
 To run storybook use command:
 
@@ -37,84 +75,91 @@ To run storybook use command:
 
 ### storybook structure
 
-![image](https://user-images.githubusercontent.com/41162650/93874211-b4d33780-fcdb-11ea-8506-cb8860b808e8.png)
-![image](https://user-images.githubusercontent.com/41162650/93874277-cae0f800-fcdb-11ea-9c41-e6cbca2fc0a4.png)
+![image](https://user-images.githubusercontent.com/41162650/94258107-04f90680-ff35-11ea-92ac-888f7650fa34.png)![image](https://user-images.githubusercontent.com/41162650/94258039-ed218280-ff34-11ea-9148-18254f27c77d.png)
 
+## Associate components to routes
 
-## Step 7. Work With GraphQl
-
-#### Request country data
-
-In the code, the component imports and destructures the GraphQL query from the `countries.gql.js` file and makes a request using `useQuery()` from the `@apollo/client` library.
-
-```jsx
-import React from 'react';
-import {gql} from '@apollo/client' // used for sending graphql requests
-import { useQuery } from '@apollo/client'; // used for parsing response from backEnd
-
-const GET_COUNTRIES_QUERY = gql`
-	query getAllCountries {
-		countries {
-			available_regions {
-				code
-				id
-				name
-			}
-			id
-		}
-	}
-`
-
-const Countries = () => {
-    const { queries } = GET_COUNTRIES_QUERY;
-    const { getCountriesQuery } = queries;
-
-    // Fetch the data using apollo react hooks
-    const { data, error, loading } = useQuery(getCountriesQuery);
-
-    // Loading and error states can detected using values returned from
-    // the useQuery hook
-    if (loading) {
-        return <span>Loading...</span>;
-    }
-
-    if (error) {
-        // This is only meant to show WHERE you can handleGraphQL errors
-        return <span>Error!</span>;
-    }
-
-    const { countries } = data;
-
-return (
-        <ul>
-            {countries.map(country => {
-                <li key={country.id}>
-                    {country.name}
-                </li>
-            })}
-        </ul>
-    )
-};
-
-export default Countries;
-```
-
-## Step 8. Associate components to routes
-
-Use the steps in the [Add a static route][] tutorial to add the following entries to the Routes component:
+Use the steps in the [a tutorial](https://magento.github.io/pwa-studio/tutorials/pwa-studio-fundamentals/add-a-static-route/) to add the following entries to the Routes component:
 
 `./local-intercept.js`
 
 ```js
-module.exports = targets => {
-  targets.of("@magento/venia-ui").routes.tap(routes => {
-    routes.push({
-      name: "MyGreetingRoute", // name of component
-      pattern: "/greeting", // url for this components
-      path: require.resolve("../components/GreetingPage/greetingPage.js") // path to component
-    });
-    return routes;
-  });
-};
+function localIntercept(targets) {
+	targets.of('@magento/venia-ui').routes.tap(routes => {
+		routes.push({
+			name: 'MyRoute', // name of component
+			pattern: '/component', // url for this components
+			path: require.resolve('./src/app/components/Component/component.js'), // path to component
+		});
+		return routes;
+	});
+}
+
+module.exports = localIntercep;
 ```
 
+Add the path to your intercept file in the pwa-studio.targets.intercept section of your project’s package.json file. This registers ./local-intercept.js as an intercept file during the build process.
+
+```js
+  "pwa-studio": {
+    "targets": {
+      "intercept": "./local-intercept.js"
+    }
+  },
+```
+
+## Replace venia files
+
+At "main" component you can add your components
+
+![image](https://user-images.githubusercontent.com/41162650/94538094-40087c00-024c-11eb-9ad6-e1918a7d604b.png)
+
+## Work With GraphQl
+
+#### Request country data
+
+In the code, the component imports and destructures the GraphQL query and makes a request using `useQuery()` from the `@apollo/client` library.
+
+```jsx
+import React from 'react';
+import gql from 'graphql-tag'; // A template literal tag for wrapping GraphQL strings
+import { useQuery } from '@apollo/react-hooks'; // It's a Hook that fetches a GraphQL query
+
+const GET_COUNTRIES_QUERY = gql`
+	query GetCountries {
+		countries {
+			id
+			full_name_english
+		}
+	}
+`;
+
+const Countries = () => {
+	// Fetch the data using apollo react hooks
+	const { data, error, loading } = useQuery(GET_COUNTRIES_QUERY);
+
+	// Loading and error states can detected using values returned from the useQuery hook
+	if (loading) {
+		return <span>Loading...</span>;
+	}
+
+	if (error) {
+		// This is only meant to show WHERE you can handleGraphQL errors
+		return <span>Error!</span>;
+	}
+
+	if (!data) return null;
+
+	const { countries } = data;
+
+	return (
+		<ul>
+			{countries.map(country => (
+				<li key={country.id}>{country.full_name_english}</li>
+			))}
+		</ul>
+	);
+};
+
+export default Countries;
+```
