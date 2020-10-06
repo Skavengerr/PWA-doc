@@ -27,9 +27,17 @@ Open a new tab with a link that shows you in the console
 
 ## Step 1. Install Ubuntu and Create symbolic links
 
-Install VirtualBox and Ubuntu, create shared folders.
+Install VirtualBox and Ubuntu, create [shared folders](https://www.howtogeek.com/187703/how-to-access-folders-on-your-host-machine-from-an-ubuntu-virtual-machine-in-virtualbox/).
 
-Create symbolic links within folders shared with the windows host system `VBoxManage.exe setextradata VM_NAME VBoxInternal2/SharedFoldersEnableSymlinksCreate/SHARED_NAME 1`
+Create symbolic links within folders shared with the windows host system, shut down your VBox, open cmd and input `VBoxManage.exe setextradata VM_NAME VBoxInternal2/SharedFoldersEnableSymlinksCreate/SHARED_NAME 1`
+
+VN_NAME - Name of your local virtual machine
+
+![image](https://user-images.githubusercontent.com/41162650/95212572-83d42600-07f6-11eb-96f5-a892fcdcf6fb.png)
+
+SHARED_NAME - Name of your local shared folder
+
+![image](https://user-images.githubusercontent.com/41162650/95212269-2f30ab00-07f6-11eb-863e-404aa3b072e3.png)
 
 Open Local Security Policy, Navigate to: Local Policies -> User Rights Assignment, Open "Create Symbolic Links", Add your username (or a group you are assigned to), Restart PC
 
